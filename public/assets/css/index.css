@@ -4,6 +4,7 @@
 
 :root{
   --small-shadow:-5px 4px 24px -4px #a8a8a8;;
+  --light-orange:rgb(238, 159, 70);
 }
 
 h1{
@@ -15,7 +16,7 @@ h2,h3,h4{
 }
 
 h5,h6,p,li,button{
-   font-family: "Poppins";
+  font-family: "Poppins";
 }
 
 i {
@@ -47,6 +48,49 @@ button:hover{
 button:focus{
   outline:none;
   border:none;
+}
+
+form{
+  background:linear-gradient(var(--light-orange),orange);
+  border-radius: 20px;
+  padding:20px;
+}
+
+form i{
+  float: right;
+  margin: 0;
+  color:black;
+}
+
+input{
+  transition: 0.3s;
+  font-family: "Poppins";
+  margin:20px;
+  border-radius: 10px;
+  background-color: rgba(0,0,0,0.5);
+  color:whitesmoke;
+  padding:10px;
+  border:0;
+  outline: 0;
+}
+
+input:focus{
+  background-color: rgba(0,0,0,0.1);
+  color:black;
+}
+
+input::placeholder{
+  color: whitesmoke;
+}
+
+input[type="submit"]{
+  transition: 0.3s;
+  background-color:black;
+  color:whitesmoke;
+}
+
+i{
+  font-size:30px;
 }
 
 .container{
@@ -94,4 +138,29 @@ button:focus{
 
 .landing-page{
   color:white;
+}
+
+.modal{
+  margin-left: auto;
+  margin-right: auto;
+  display:none;
+  width:100%;
+  height:100%;
+  background-color:rgba(0,0,0,0.8)
+}
+
+.index-forms{
+  margin-top:100px;
+  height:fit-content;
+  min-height: 300px;
+  border-radius: 20px;
+  width:fit-content;
+  min-width:400px;
+  border-radius:30px;
+}
+
+.index-forms h1,h2,h3,h4,p{
+  margin:auto;
+  text-align: center;
+  color: black;
 }
