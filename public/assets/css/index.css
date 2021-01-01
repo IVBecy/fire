@@ -1,0 +1,75 @@
+@import url(//fonts.googleapis.com/css?family=Poppins);
+@import url(//fonts.googleapis.com/css?family=Titillium+Web);
+@import url(//fonts.googleapis.com/css?family=Francois+One);
+
+:root{
+  --small-shadow:-5px 4px 24px -4px #a8a8a8;;
+}
+
+h1{
+  font-family: "Francois One";
+}
+
+h2,h3,h4{
+  font-family: "Titillium Web";
+}
+
+h5,h6,p,li{
+   font-family: "Poppins";
+}
+
+i {
+  margin:10px;
+}
+
+body,html{
+  height: 100%;
+  background-color: whitesmoke;
+}
+
+.container{
+  text-align: center;
+}
+
+.container-fluid{
+  text-align: center;
+  padding:10px;
+}
+
+.right-container{
+  text-align:right;
+  margin-left: auto;
+  margin-right: 50px;
+  margin-bottom:50px;
+  width: 70%;
+  margin-bottom: 30px;
+}
+
+.left-container{
+  text-align:left;
+  margin-right: auto;
+  margin-left: 50px;
+  margin-bottom:50px;
+  width: 70%;
+}
+
+.header{
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+  color:white;
+}
+
+.header-outside{
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+  color:white;
+  overflow: hidden
+}
+
+.header-outside h1,h2,h3,h4,p {
+  float: left;
+}
+
+.landing-page{
+  color:white;
+}
