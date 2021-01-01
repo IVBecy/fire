@@ -29,10 +29,7 @@
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       const p = document.createElement("h1");
-      if (urlParams.get('err')){
-        var txt = "Username / email is taken"
-      }
-      p.textContent = txt;
+      p.textContent = urlParams.get('err');
       document.getElementById("error").appendChild(p);
     })
   </script>

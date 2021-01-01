@@ -39,7 +39,7 @@ const SignUpForm = () => {
 const SignInForm = () => {
   return (
     <div className="container index-forms" id="sign-in-form">
-      <form id="sign-up-form" method="POST" action="./login">
+      <form method="POST" action="/signin">
         <i className="fas fa-times"></i>
         <h1>Sign in</h1><br />
         <input type="text" name="username" placeholder="Username" required/><br />

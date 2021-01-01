@@ -1,11 +1,11 @@
 const express = require("express");
-const app = express();
-const port = 8000;
 const path = require("path");
 const user = require("./user");
 const bodyParser = require("body-parser") ;
 const db_connection = require("./connect");
 const bcrypt = require("bcrypt");
+const app = express();
+const port = 8000;
 //Function for finding records in the database
 const findResources = () => {
   user.find({ }, "username email password", function (err, res) {
@@ -61,6 +61,33 @@ app.post('/signup', (req,res) => {
       console.log(err);
       res.redirect(`../error.html?err=${err}`)
       res.end()
+    }
+  })
+});
+// Sign in
+app.post("/signin",(req,response) => {
+  const postUsername = escape(req.body.username);
+  const postPassword = req.body.password;
+  user.findOne({"username":postUsername}, (err,res) => {
+    if (err) throw err;
+    else{
+      if (res){
+        if (bcrypt.compareSync(postPassword, res["password"])){
+          console.log("Logged in");
+          response.redirect("board");
+          response.end();
+        }
+        else{
+          console.log("Wrong password");
+          response.redirect("../error.html?err=wrong_password");
+          response.end();
+        }
+      }
+      else{
+        console.log(`There is no ${postUsername} in our database.`);
+        response.redirect(`../error.html?err=${postUsername}_not_found`);
+        response.end();
+      }
     }
   })
 });
