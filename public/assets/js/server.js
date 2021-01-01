@@ -4,6 +4,7 @@ const user = require("./user");
 const bodyParser = require("body-parser") ;
 const db_connection = require("./connect");
 const bcrypt = require("bcrypt");
+const session = require('express-session');
 const app = express();
 const port = 8000;
 //Function for finding records in the database
@@ -28,6 +29,7 @@ const deleteAllData = async () => {
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
+app.use(session({secret: "BillyTheSloth",resave: true,saveUninitialized: true}))
 app.listen(port)
 console.log(`Server up at 127.0.0.1:${port}`);
 // main page
@@ -48,6 +50,8 @@ app.post('/signup', (req,res) => {
   })
   newUser.save().then(() => { 
     console.log("New user is in the DB");
+    var Session = req.session;
+    Session.username = escape(req.body.username);
     res.redirect("board")
     res.end()
     }).catch(err => { 
@@ -74,6 +78,8 @@ app.post("/signin",(req,response) => {
       if (res){
         if (bcrypt.compareSync(postPassword, res["password"])){
           console.log("Logged in");
+          var Session = req.session;
+          Session.username = postUsername;
           response.redirect("board");
           response.end();
         }
