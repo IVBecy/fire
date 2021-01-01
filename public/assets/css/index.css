@@ -159,8 +159,15 @@ i{
   border-radius:30px;
 }
 
-.index-forms h1,h2,h3,h4,p{
+.index-forms h1,h2,h4,p{
   margin:auto;
   text-align: center;
   color: black;
+}
+
+@media screen and (max-width:800px){
+  .index-forms{
+    width:95%;
+    min-width:0;
+  }
 }
