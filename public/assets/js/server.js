@@ -1,41 +1,66 @@
-// To generate page with express
 const express = require("express");
 const app = express();
 const port = 8000;
 const path = require("path");
-const mongoose = require("mongoose");
-mongoose.set("useNewUrlParser", true);
-mongoose.set("useUnifiedTopology", true);
-mongoose.set('useCreateIndex', true);
-const mongo = "localhost:27017";
-const DB = "fire_db";
 const user = require("./user");
-//Connecting database
-mongoose.connect(`mongodb://${mongo}/${DB}`).then(() => { console.log(`Connected to mongodb://${mongo}/${DB}`); }).catch((err) => console.log(err));
+const bodyParser = require("body-parser") ;
+const db_connection = require("./connect");
+const bcrypt = require("bcrypt");
 //Function for finding records in the database
-const findResources = (model,record,name) => {
-  model.find({record:name},record,(err,res) => {
-    if (err) throw err;
-    console.log(res);
-  });
-  user.find({ 'username': 'John' }, 'username', function (err, res) {
+const findResources = () => {
+  user.find({ }, "username email password", function (err, res) {
     if (err) throw err;
     console.log(res);
   })
 }
+findResources();
 // Delete all data
 const deleteAllData = async () => {
   try {
     await user.deleteMany();
-    console.log('All Data successfully deleted');
+    console.log("All Data successfully deleted");
   } catch (err) {
     console.log(err);
   }
 };
-// Serving
-app.use(express.static('public'));
-app.get("/",(req,res) => {
-  res.sendFile(path.join(process.cwd(),"./public/index.html"));
-})
+//deleteAllData()
+// Serving + routes + middleware
+app.use(express.static("public"));
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json());
 app.listen(port)
 console.log(`Server up at 127.0.0.1:${port}`);
+// main page
+app.get("/",(req,res) => {
+  res.sendFile("public/index.html");
+})
+// board
+app.get("/board", (req, res) => {
+  res.sendFile("public/board.html",{root:process.cwd()});
+})
+console.log(process.cwd());
+// Sign up 
+app.post('/signup', (req,res) => {
+  var newUser = new user({
+    username: escape(req.body.username),
+    password: bcrypt.hashSync(escape(req.body.password),10),
+    email: escape(req.body.email),
+  })
+  newUser.save().then(() => { 
+    console.log("New user is in the DB");
+    res.redirect("board")
+    res.end()
+    }).catch(err => { 
+    //Duplicate key error !!!!(will switch to ajax later)!!!!
+    if (err.code == 11000){
+      console.log("Duplicate key");
+      res.redirect("../error.html?err=Duplicate-Key")
+      res.end()
+    }
+    else{
+      console.log(err);
+      res.redirect(`../error.html?err=${err}`)
+      res.end()
+    }
+  })
+});
