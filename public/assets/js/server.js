@@ -27,6 +27,7 @@ const deleteAllData = async () => {
 //deleteAllData()
 // Serving + routes + middleware
 app.set("view engine", "ejs"); 
+app.set('views', path.join(process.cwd(), '/public/views'));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
