@@ -5,16 +5,18 @@ const bodyParser = require("body-parser") ;
 const db_connection = require("./connect");
 const bcrypt = require("bcrypt");
 const session = require('express-session');
+const { Session } = require("inspector");
 const app = express();
 const port = 8000;
 //Function for finding records in the database
-const findResources = () => {
-  user.find({ }, "username email password", function (err, res) {
-    if (err) throw err;
-    console.log(res);
+const findResources = (model,name) => {
+  model.findOne({"username":name}).then(data => {
+    console.log(data);
+    return data
+  }).catch(err => {
+    console.log(err);
   })
 }
-findResources();
 // Delete all data
 const deleteAllData = async () => {
   try {
@@ -24,7 +26,6 @@ const deleteAllData = async () => {
     console.log(err);
   }
 };
-//deleteAllData()
 // Serving + routes + middleware
 app.set("view engine", "ejs"); 
 app.set('views', path.join(process.cwd(), '/public/views'));
@@ -38,13 +39,8 @@ console.log(`Server up at 127.0.0.1:${port}`);
 app.get("/",(req,res) => {
   res.sendFile("public/index.html");
 })
-// board
-app.get("/board", (req, res) => {
-  res.sendFile("public/board.html",{root:process.cwd()});
-})
-console.log(process.cwd());
 // Sign up 
-app.post('/signup', (req,res) => {
+app.post('/signup', (req,response) => {
   var newUser = new user({
     username: escape(req.body.username),
     password: bcrypt.hashSync(escape(req.body.password),10),
@@ -52,19 +48,20 @@ app.post('/signup', (req,res) => {
   })
   newUser.save().then(() => { 
     console.log("New user is in the DB");
-    var Session = req.session;
-    Session.username = escape(req.body.username);
-    res.redirect("board")
-    res.end()
+    var Sess = req.session;
+    Sess.username = escape(req.body.username);
+    response.redirect("board")
+    app.get("/board", (req, res) => {
+      res.render("board", { session: Sess, username: Sess.username })
+      res.end()
+      })
     }).catch(err => { 
     //Duplicate key error
     if (err.code == 11000){
-      console.log("Duplicate key");
       res.render("error", { error_msg: "This email / username already exists." })
       res.end();
     }
     else{
-      console.log(err);
       res.render("error", { error_msg: err })
       res.end();
     }
@@ -79,14 +76,15 @@ app.post("/signin",(req,response) => {
     else{
       if (res){
         if (bcrypt.compareSync(postPassword, res["password"])){
-          console.log("Logged in");
-          var Session = req.session;
-          Session.username = postUsername;
-          response.redirect("board");
-          response.end();
+          var Sess = req.session;
+          Sess.username = postUsername;
+          response.redirect("board")
+          app.get("/board", (req, res) => {
+            res.render("board", { session: Sess, username: Sess.username })
+            res.end()
+          })
         }
         else{
-          console.log("Wrong password");
           response.render("error",{error_msg:"Wrong password"})
           response.end();
         }
