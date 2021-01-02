@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,16 +25,8 @@
   <div class="modal"></div>
   <div id="header"></div>
   <script type="text/jsx">ReactDOM.render(<Header/>,document.getElementById("header"))</script>
-  <script>
-    $(document).ready(() => {
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const p = document.createElement("h1");
-      p.textContent = urlParams.get('err');
-      document.getElementById("error").appendChild(p);
-    })
-  </script>
   <div class="container" style="text-align: center;color:black;" id="error">
     <h1 style="color:white">Something went wrong, look at the error message below:</h1>
+    <h2><%= error_msg %></h2>
   </div>
 </body>

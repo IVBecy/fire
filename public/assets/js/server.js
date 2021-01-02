@@ -26,6 +26,7 @@ const deleteAllData = async () => {
 };
 //deleteAllData()
 // Serving + routes + middleware
+app.set("view engine", "ejs"); 
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
@@ -55,16 +56,16 @@ app.post('/signup', (req,res) => {
     res.redirect("board")
     res.end()
     }).catch(err => { 
-    //Duplicate key error !!!!(will switch to ajax later)!!!!
+    //Duplicate key error
     if (err.code == 11000){
       console.log("Duplicate key");
-      res.redirect("../error.html?err=Duplicate-Key")
-      res.end()
+      res.render("error", { error_msg: "This email / username already exists." })
+      res.end();
     }
     else{
       console.log(err);
-      res.redirect(`../error.html?err=${err}`)
-      res.end()
+      res.render("error", { error_msg: err })
+      res.end();
     }
   })
 });
@@ -85,14 +86,9 @@ app.post("/signin",(req,response) => {
         }
         else{
           console.log("Wrong password");
-          response.redirect("../error.html?err=wrong_password");
+          response.render("error",{error_msg:"Wrong password"})
           response.end();
         }
-      }
-      else{
-        console.log(`There is no ${postUsername} in our database.`);
-        response.redirect(`../error.html?err=${postUsername}_not_found`);
-        response.end();
       }
     }
   })
