@@ -9,6 +9,8 @@
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
   <!--  Jquery link(s)  -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <!--  React.js libraries  -->
   <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
@@ -25,5 +27,10 @@
   <div class="modal"></div>
   <div id="header"></div>
   <script type="text/jsx">ReactDOM.render(<Header/>,document.getElementById("header"))</script>
-  <div class="container-fluid list-collective"></div>
+  <div class="container-fluid list-collective">
+    <div class="list"><div class="card">Buy oranges</div><div class="card">Do shit</div></div>
+    <div class="list"></div>
+    <div class="list"></div>
+    <div class="add-list"><i class="fas fa-plus"></i>Add list</div>
+  </div>
 </body>

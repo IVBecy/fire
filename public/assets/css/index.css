@@ -21,7 +21,7 @@ h2,h3,h4{
   font-family: "Titillium Web";
 }
 
-h5,h6,p,li,button{
+h5,h6,p,li,button,div{
   font-family: "Poppins";
 }
 
@@ -182,7 +182,47 @@ i{
   width:300px;
   min-height:50px;
   padding:10px;
-  margin:10px
+  margin:10px;
+  color:black;
+}
+
+.add-list{
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+  color:black;
+  border-radius: 5px;
+  display: inline-block;
+  width:300px;
+  min-height:20px;
+  padding:10px;
+  margin:10px;
+  transition:0.3s;
+}
+
+.add-list:hover{
+  background-color: rgba(255, 255, 255, 0.356); 
+}
+
+.add-list i {
+  font-size: 20px;
+}
+
+.card {
+  text-align: left;
+  background-color:whitesmoke;
+  border-radius: 5px;
+  display: block;
+  width:250px;
+  padding:10px;
+  margin:10px;
+  color:black;
+  box-shadow: 6px 7px 13px -6px rgb(206, 206, 206);
+}
+
+.tilt {
+  transform: rotate(3deg);
+  -moz-transform: rotate(3deg);
+  -webkit-transform: rotate(3deg);
 }
 
 @media screen and (max-width:800px){
@@ -194,6 +234,10 @@ i{
   .list{
     float: none;
     display: inline-block;
+    width:90%;
+  }
+
+  .card{
     width:90%;
   }
 }

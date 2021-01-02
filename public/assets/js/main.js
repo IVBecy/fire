@@ -38,4 +38,20 @@ $(document).ready(() => {
       }, 10);
     }
   }
+  // Make draggable cards
+  $(".list").sortable({revert: true});
+  $(".card").draggable({
+    connectToSortable: ".list",
+    revert: "invalid",
+    start:(e) => {
+      e.target.style.cursor = "grabbing";
+      e.target.classList.add("tilt")
+    },
+    stop: (e) => {
+      console.log(e.target.parentNode)
+      e.target.style.cursor = "initial";
+      e.target.classList.remove("tilt")
+    }
+  });
+  $("div").disableSelection();
 })
