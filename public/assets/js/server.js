@@ -6,6 +6,9 @@ const db_connection = require("./connect");
 const bcrypt = require("bcrypt");
 const session = require('express-session');
 const { Session } = require("inspector");
+const csrf = require('csurf')
+const csrfProtection = csrf({ cookie: true })
+const cookieParser = require('cookie-parser')
 const app = express();
 const port = 8000;
 //Function for finding records in the database
@@ -26,18 +29,19 @@ const deleteAllData = async () => {
     console.log(err);
   }
 };
-// Serving + routes + middleware
+//middleware
 app.set("view engine", "ejs"); 
 app.set('views', path.join(process.cwd(), '/public/views'));
 app.use(express.static("public"));
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser())
 app.use(bodyParser.json());
 app.use(session({secret: "BillyTheSloth",resave: true,saveUninitialized: true}))
 app.listen(port)
 console.log(`Server up at 127.0.0.1:${port}`);
 // main page
-app.get("/",(req,res) => {
-  res.sendFile("public/index.html");
+app.get("/", csrfProtection,(req,res) => {
+  res.render("index", { csrf_token: req.csrfToken()});
 })
 // Sign up 
 app.post('/signup', (req,response) => {
@@ -68,7 +72,7 @@ app.post('/signup', (req,response) => {
   })
 });
 // Sign in
-app.post("/signin",(req,response) => {
+app.post("/signin",csrfProtection,(req,response) => {
   const postUsername = escape(req.body.username);
   const postPassword = req.body.password;
   user.findOne({"username":postUsername}, (err,res) => {

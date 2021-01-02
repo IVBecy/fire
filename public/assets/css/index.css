@@ -5,6 +5,7 @@
 :root{
   --small-shadow:-5px 4px 24px -4px #a8a8a8;;
   --light-orange:rgb(238, 159, 70);
+  --light-grey:rgb(235, 235, 235);
 }
 
 body,html{
@@ -169,9 +170,30 @@ i{
   color: black;
 }
 
+.list-collective{
+  display: inline-block;
+  text-align: center;
+}
+
+.list{
+  background-color:var(--light-grey);
+  border-radius: 5px;
+  float: left;
+  width:300px;
+  min-height:50px;
+  padding:10px;
+  margin:10px
+}
+
 @media screen and (max-width:800px){
   .index-forms{
     width:95%;
     min-width:0;
+  }
+
+  .list{
+    float: none;
+    display: inline-block;
+    width:90%;
   }
 }
