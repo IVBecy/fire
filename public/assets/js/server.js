@@ -77,7 +77,7 @@ app.post("/signin",csrfProtection,(req,response) => {
   const postUsername = escape(req.body.username);
   const postPassword = req.body.password;
   user.findOne({"username":postUsername}, (err,res) => {
-    if (err) throw err;
+    if (err) {response.render("error",{error_msg:err})}
     else{
       if (res){
         if (bcrypt.compareSync(postPassword, res.password)){
