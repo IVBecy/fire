@@ -59,6 +59,16 @@ $(document).ready(() => {
       stop: (e) => {
         e.target.style.cursor = "initial";
         e.target.classList.remove("tilt")
+        // Making a request to server.js to replace the old parent
+        var x = new XMLHttpRequest();
+        var data = {
+          username:document.getElementsByName("username")[0].content,
+          card_name:e.target.textContent,
+          parent:e.target.parentNode.parentNode.id,
+        };
+        x.open("POST","/move-list")
+        x.setRequestHeader('Content-type', 'application/json');
+        x.send(JSON.stringify(data))
       }
     });
     $("div").disableSelection();

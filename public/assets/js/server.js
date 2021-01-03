@@ -119,3 +119,19 @@ app.post("/create-card", (request,response) => {
     }
   })
 })
+// Moving a card to a new list
+app.post("/move-list",(req,res) => {
+  user.findOne({"username":req.body.username}).then(data => {
+    user.updateOne({ "collect.card_name": req.body.card_name }, { $set: { "collect.$.parent": req.body.parent } }, (err, response) => {
+      if (err) { res.render("error",{error_msg:err}) }
+      else {
+        user.findOne({ "username": req.body.username }).then(data => {
+          Sess.collect = data.collect;
+          res.redirect("board");
+        }).catch(err => {
+          res.render("error", { error_msg: err })
+        })
+      }
+    })
+  }).catch(err => {console.log(err);})
+});

@@ -36,7 +36,6 @@
         var card = document.createElement("DIV");
         card.className = "card";
         card.textContent = "<%=collect[i]['card_name']%>";
-        console.log("<%=collect[i]['card_name']%>");
         for (var i in c.children) {
           if (c.children[i].id == "<%=collect[i]['parent']%>".concat("-list")) {
             c.children[i].appendChild(card)
