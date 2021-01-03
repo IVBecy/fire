@@ -11,6 +11,7 @@ const csrfProtection = csrf({ cookie: true })
 const cookieParser = require("cookie-parser")
 const app = express();
 const port = 8000;
+var Sess;
 //Function for finding records in the database
 const findResources = (model,name) => {
   model.findOne({"username":name}).then(data => {
@@ -43,6 +44,9 @@ console.log(`Server up at 127.0.0.1:${port}`);
 app.get("/", csrfProtection,(req,res) => {
   res.render("index", { csrf_token: req.csrfToken()});
 })
+app.get("/board", csrfProtection, (req, res) => {
+  res.render("board",{session:Sess,username:Sess.username,csrf_token:req.csrfToken(),collect:Sess.collect})
+})
 // Sign up 
 app.post('/signup', (req,response) => {
   var newUser = new user({
@@ -52,14 +56,10 @@ app.post('/signup', (req,response) => {
     collect:"",
   })
   newUser.save().then(() => { 
-    console.log("New user is in the DB");
-    var Sess = req.session;
+    console.log(`${req.body.username} is in the database.`);
+    Sess = req.session;
     Sess.username = escape(req.body.username);
     response.redirect("board")
-    app.get("/board", csrfProtection,(req, res) => {
-      res.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:[]})
-      res.end()
-      })
     }).catch(err => { 
     //Duplicate key error
     if (err.code == 11000){
@@ -81,13 +81,10 @@ app.post("/signin",csrfProtection,(req,response) => {
     else{
       if (res){
         if (bcrypt.compareSync(postPassword, res.password)){
-          var Sess = req.session;
+          Sess = req.session;
           Sess.username = postUsername;
+          Sess.collect = res.collect;
           response.redirect("board")
-          app.get("/board", csrfProtection,(req, rspns) => {
-            rspns.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:res.collect})
-            rspns.end()
-          })
         }
         else{
           response.render("error",{error_msg:"Wrong password"});
@@ -107,24 +104,18 @@ app.post("/create-card", (request,response) => {
     card_name: request.body.card_name,
     parent: request.body.parent_element,
   };
-  // Find all data
-  user.findOne({ "username": request.body.username}).then(data => {
-    // Append new data
-    user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData }}, (err,res) => {
-      if (err) {
-        res.render("error",{error_msg:err})
-      }
-      else {
-        findResources(user,request.body.username)
-        app.get("/board", csrfProtection, (req, res) => {
-          res.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:data.collect })
-          res.end()
-        })
-        response.redirect("board");
-      }
-    })
-  }).catch(err => {
-    response.render("error",{error_msg:err});
-    response.end();
+  // Append new data
+  user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData } }, (err, res) => {
+    if (err) {
+      res.render("error", { error_msg: err })
+    }
+    else {
+      user.findOne({ "username": request.body.username }).then(data => {
+        Sess.collect = data.collect;
+      }).catch(err => {
+        response.render("error",{error_msg:err})
+      })
+      response.redirect("board");
+    }
   })
 })

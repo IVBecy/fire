@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta content="<%=csrf_token%>" name="csrf-token" />
   <meta content="<%=username%>" name="username" />
+  <meta content="<%=session%>" name="session"/>
   <!--  Bootstrap(s)  -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -29,23 +29,22 @@
   <div class="modal"></div>
   <div id="header"></div>
   <script type="text/jsx">ReactDOM.render(<Header/>,document.getElementById("header"))</script>
-  <% if (collect) {%>
-    <% for(var i in collect){%>
-      <script>
-        $(document).ready(() => {
-          var c = document.getElementById("<%=collect[i]['parent']%>");
-          var card = document.createElement("DIV");
-          card.className = "card";
-          card.textContent = "<%=collect[i]['card_name']%>";
-          for (var i in c.children){
-            if (c.children[i].id == "<%=collect[i]['parent']%>".concat("-list")){
-              c.children[i].appendChild(card)
-            }
+  <% for(var i in collect){%>
+    <script>
+      $(document).ready(() => {
+        var c = document.getElementById("<%=collect[i]['parent']%>");
+        var card = document.createElement("DIV");
+        card.className = "card";
+        card.textContent = "<%=collect[i]['card_name']%>";
+        console.log("<%=collect[i]['card_name']%>");
+        for (var i in c.children) {
+          if (c.children[i].id == "<%=collect[i]['parent']%>".concat("-list")) {
+            c.children[i].appendChild(card)
           }
-        })
-      </script>
-      <%}%>
-  <%}%>
+        }
+      })
+    </script>
+    <%}%>
   <div class="container-fluid">
     <div class="list-container" id="to-do">
       <h5>To-Do</h5>

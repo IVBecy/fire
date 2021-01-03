@@ -57,7 +57,6 @@ $(document).ready(() => {
         e.target.classList.add("tilt")
       },
       stop: (e) => {
-        console.log(e.target.parentNode)
         e.target.style.cursor = "initial";
         e.target.classList.remove("tilt")
       }
@@ -70,7 +69,6 @@ $(document).ready(() => {
     for (var i in addCardBtns){
       if (typeof addCardBtns[i] === "object") {
         addCardBtns[i].onclick = (e) => {
-          console.log(e.target.parentNode.id);
           e.target.style.display = "none";
           const newDiv = document.createElement("div");
           e.target.parentNode.appendChild(newDiv);
@@ -82,7 +80,7 @@ $(document).ready(() => {
             createHiddenInput("parent_element",e.target.parentNode.id,document.getElementsByTagName("form")[0])
             // username
             const name = document.getElementsByName("username")[0].content;
-            createHiddenInput("username", name, document.getElementsByTagName("form")[0])
+            createHiddenInput("username", name, document.getElementsByTagName("form")[0]);
           },10);
         } 
       }
