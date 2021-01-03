@@ -1,3 +1,4 @@
+"Use strict"
 $(document).ready(() => {
   // Adding csrf token to forms
   const createTokenInput = () => {

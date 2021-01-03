@@ -1,3 +1,4 @@
+"Use strict"
 const express = require("express");
 const path = require("path");
 const user = require("./user");
@@ -31,13 +32,14 @@ const deleteAllData = async () => {
   }
 };
 //middleware
+app.disable("x-powered-by")
 app.set("view engine", "ejs"); 
 app.set('views', path.join(process.cwd(), '/public/views'));
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser())
 app.use(bodyParser.json());
-app.use(session({secret: "BillyTheSloth",resave: true,saveUninitialized: true}))
+app.use(session({secret: "BillyTheSloth",resave: true,saveUninitialized: true, httpOnly: true,}))
 app.listen(port)
 console.log(`Server up at 127.0.0.1:${port}`);
 // main page
@@ -101,8 +103,8 @@ app.post("/signin",csrfProtection,(req,response) => {
 //Creating new cards
 app.post("/create-card", (request,response) => {
   const newData = {
-    card_name: request.body.card_name,
-    parent: request.body.parent_element,
+    card_name: escape(request.body.card_name),
+    parent: escape(request.body.parent_element),
   };
   // Append new data
   user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData } }, (err, res) => {

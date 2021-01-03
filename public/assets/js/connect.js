@@ -1,3 +1,4 @@
+"Use strict"
 // Script that connect to the DB
 const mongoose = require("mongoose");
 mongoose.set("useNewUrlParser", true);

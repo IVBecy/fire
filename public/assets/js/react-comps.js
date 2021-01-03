@@ -1,3 +1,4 @@
+"Use strict"
 // File to manage all the react hooks
 
 // Header (navbar kinda)
