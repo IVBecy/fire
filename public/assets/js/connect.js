@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useUnifiedTopology", true);
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 const mongo = "localhost:27017";
 const DB = "fire_db";
 //Connecting database

@@ -49,3 +49,13 @@ const SignInForm = () => {
     </div>
   )
 }
+
+// card creating form
+const CreateCard = () => {
+  return(
+    <form className="add-card-form" method="POST" action="/create-card">
+      <input type="text" name="card_name" placeholder="Enter a title for this card..."/><br/>
+      <input type="submit" value="Create"/>
+    </form>
+  )
+}

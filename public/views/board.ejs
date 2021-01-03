@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta content="<%=csrf_token%>" name="csrf-token" />
+  <meta content="<%=username%>" name="username" />
   <!--  Bootstrap(s)  -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
     integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
@@ -23,14 +25,42 @@
   <script type="text/jsx" src="./assets/js/main.js"></script>
   <title>Fire 🔥 - Board</title>
 </head>
-<body style="background-color: orangered;">
+<body>
   <div class="modal"></div>
   <div id="header"></div>
   <script type="text/jsx">ReactDOM.render(<Header/>,document.getElementById("header"))</script>
-  <div class="container-fluid list-collective">
-    <div class="list"><div class="card">Buy oranges</div><div class="card">Do shit</div></div>
-    <div class="list"></div>
-    <div class="list"></div>
-    <div class="add-list"><i class="fas fa-plus"></i>Add list</div>
+  <% if (collect) {%>
+    <% for(var i in collect){%>
+      <script>
+        $(document).ready(() => {
+          var c = document.getElementById("<%=collect[i]['parent']%>");
+          var card = document.createElement("DIV");
+          card.className = "card";
+          card.textContent = "<%=collect[i]['card_name']%>";
+          for (var i in c.children){
+            if (c.children[i].id == "<%=collect[i]['parent']%>".concat("-list")){
+              c.children[i].appendChild(card)
+            }
+          }
+        })
+      </script>
+      <%}%>
+  <%}%>
+  <div class="container-fluid">
+    <div class="list-container" id="to-do">
+      <h5>To-Do</h5>
+      <div class="list" id="to-do-list"></div>
+      <div class="add-card"><i class="fas fa-plus"></i>Add card</div>
+    </div>
+    <div class="list-container" id="in-progress">
+      <h5>In-progress</h5>
+      <div class="list" id="in-progress-list"></div>
+      <div class="add-card"><i class="fas fa-plus"></i>Add card</div>
+    </div>
+    <div class="list-container" id="done">
+      <h5>Done</h5>
+      <div class="list" id="done-list"></div>
+      <div class="add-card"><i class="fas fa-plus"></i>Add card</div>
+    </div>
   </div>
 </body>

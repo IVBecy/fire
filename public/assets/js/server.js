@@ -4,11 +4,11 @@ const user = require("./user");
 const bodyParser = require("body-parser") ;
 const db_connection = require("./connect");
 const bcrypt = require("bcrypt");
-const session = require('express-session');
+const session = require("express-session");
 const { Session } = require("inspector");
-const csrf = require('csurf')
+const csrf = require("csurf")
 const csrfProtection = csrf({ cookie: true })
-const cookieParser = require('cookie-parser')
+const cookieParser = require("cookie-parser")
 const app = express();
 const port = 8000;
 //Function for finding records in the database
@@ -49,14 +49,15 @@ app.post('/signup', (req,response) => {
     username: escape(req.body.username),
     password: bcrypt.hashSync(escape(req.body.password),10),
     email: escape(req.body.email),
+    collect:"",
   })
   newUser.save().then(() => { 
     console.log("New user is in the DB");
     var Sess = req.session;
     Sess.username = escape(req.body.username);
     response.redirect("board")
-    app.get("/board", (req, res) => {
-      res.render("board", { session: Sess, username: Sess.username })
+    app.get("/board", csrfProtection,(req, res) => {
+      res.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:[]})
       res.end()
       })
     }).catch(err => { 
@@ -79,20 +80,51 @@ app.post("/signin",csrfProtection,(req,response) => {
     if (err) throw err;
     else{
       if (res){
-        if (bcrypt.compareSync(postPassword, res["password"])){
+        if (bcrypt.compareSync(postPassword, res.password)){
           var Sess = req.session;
           Sess.username = postUsername;
           response.redirect("board")
-          app.get("/board", (req, res) => {
-            res.render("board", { session: Sess, username: Sess.username })
-            res.end()
+          app.get("/board", csrfProtection,(req, rspns) => {
+            rspns.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:res.collect})
+            rspns.end()
           })
         }
         else{
-          response.render("error",{error_msg:"Wrong password"})
+          response.render("error",{error_msg:"Wrong password"});
           response.end();
         }
+      }
+      else{
+        response.render("error", { error_msg: `${postUsername} is not a user.`});
+        response.end();
       }
     }
   })
 });
+//Creating new cards
+app.post("/create-card", (request,response) => {
+  const newData = {
+    card_name: request.body.card_name,
+    parent: request.body.parent_element,
+  };
+  // Find all data
+  user.findOne({ "username": request.body.username}).then(data => {
+    // Append new data
+    user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData }}, (err,res) => {
+      if (err) {
+        res.render("error",{error_msg:err})
+      }
+      else {
+        findResources(user,request.body.username)
+        app.get("/board", csrfProtection, (req, res) => {
+          res.render("board", { session: Sess, username: Sess.username, csrf_token: req.csrfToken(),collect:data.collect })
+          res.end()
+        })
+        response.redirect("board");
+      }
+    })
+  }).catch(err => {
+    response.render("error",{error_msg:err});
+    response.end();
+  })
+})
