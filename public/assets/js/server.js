@@ -47,20 +47,23 @@ app.get("/", csrfProtection,(req,res) => {
   res.render("index", { csrf_token: req.csrfToken()});
 })
 app.get("/board", csrfProtection, (req, res) => {
+  for(var i in Sess.collect){
+    Sess.collect[i].card_name = decodeURI(Sess.collect[i].card_name)
+  };
   res.render("board",{session:Sess,username:Sess.username,csrf_token:req.csrfToken(),collect:Sess.collect})
 })
 // Sign up 
 app.post('/signup', (req,response) => {
   var newUser = new user({
-    username: escape(req.body.username),
-    password: bcrypt.hashSync(escape(req.body.password),10),
-    email: escape(req.body.email),
+    username: encodeURI(req.body.username),
+    password: bcrypt.hashSync(encodeURI(req.body.password),10),
+    email: encodeURI(req.body.email),
     collect:"",
   })
   newUser.save().then(() => { 
     console.log(`${req.body.username} is in the database.`);
     Sess = req.session;
-    Sess.username = escape(req.body.username);
+    Sess.username = encodeURI(req.body.username);
     response.redirect("board")
     }).catch(err => { 
     //Duplicate key error
@@ -76,7 +79,7 @@ app.post('/signup', (req,response) => {
 });
 // Sign in
 app.post("/signin",csrfProtection,(req,response) => {
-  const postUsername = escape(req.body.username);
+  const postUsername = encodeURI(req.body.username);
   const postPassword = req.body.password;
   user.findOne({"username":postUsername}, (err,res) => {
     if (err) {response.render("error",{error_msg:err})}
@@ -103,8 +106,8 @@ app.post("/signin",csrfProtection,(req,response) => {
 //Creating new cards
 app.post("/create-card", (request,response) => {
   const newData = {
-    card_name: escape(request.body.card_name),
-    parent: escape(request.body.parent_element),
+    card_name: encodeURI(request.body.card_name),
+    parent: encodeURI(request.body.parent_element),
   };
   // Append new data
   user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData } }, (err, res) => {

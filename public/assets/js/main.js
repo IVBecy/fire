@@ -64,7 +64,7 @@ $(document).ready(() => {
         var x = new XMLHttpRequest();
         var data = {
           username:document.getElementsByName("username")[0].content,
-          card_name:e.target.textContent,
+          card_name:encodeURI(e.target.textContent),
           parent:e.target.parentNode.parentNode.id,
         };
         x.open("POST","/move-list")
