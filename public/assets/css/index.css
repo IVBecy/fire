@@ -124,6 +124,11 @@ i{
   background-color: rgba(255, 255, 255, .15);  
   backdrop-filter: blur(5px);
   color:white;
+  overflow: hidden;
+}
+
+.header .sign-out {
+  float: right;
 }
 
 .header h3 {
@@ -273,6 +278,27 @@ form.add-card-form input[type="submit"]{
 form.add-card-form input[type="text"]:focus{
   background-color: black;
   color:white;
+}
+
+.card-overlay{
+  padding:10px;
+  background-color: whitesmoke;
+  min-width: 300px;
+  width: fit-content;
+  text-align: left;
+  margin-top:10% ;
+  border-radius: 20px;
+}
+
+.card-overlay button{
+  background-color: rgba(255, 0, 0, 0.7);
+  color:white;
+  text-align: left;
+  float: none;
+  margin:10px;
+  border-radius: 10px;
+  padding:10px;
+  transition: 0.3s;
 }
 
 @media screen and (max-width:800px){

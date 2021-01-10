@@ -97,4 +97,32 @@ $(document).ready(() => {
       }
     }
   }
+  // When clicking on a card bring up menu for it
+  var cards = document.getElementsByClassName("card");
+  for(var i in cards){
+    if (typeof cards[i] === "object"){
+      cards[i].onclick = (e) => {
+        document.getElementsByClassName("modal")[0].style.display = "block";
+        setTimeout(() => { 
+          ReactDOM.render(<CardOverlay name={e.target.textContent}/>, document.getElementsByClassName("modal")[0]);
+          document.getElementsByClassName("fas fa-times")[0].onclick = () => {document.getElementsByClassName("modal")[0].style.display = "none"};
+          document.getElementById("delete-card-btn").onclick = () => {
+            // Making a request to server.js to delete the requested card
+            var x = new XMLHttpRequest();
+            var data = {
+              username: document.getElementsByName("username")[0].content,
+              card_name: encodeURI(e.target.textContent),
+              parent: e.target.parentNode.parentNode.id,
+            };
+            x.open("POST", "/delete-card")
+            x.setRequestHeader("Content-type", "application/json");
+            x.send(JSON.stringify(data));
+            setTimeout(() => {
+              window.location.reload();
+            },100)
+          }
+        },10);
+      }
+    }
+  };
 })

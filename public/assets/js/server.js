@@ -14,8 +14,8 @@ const app = express();
 const port = 8000;
 var Sess;
 //Function for finding records in the database
-const findResources = (model,name) => {
-  model.findOne({"username":name}).then(data => {
+const findResources = () => {
+  user.findOne({}).then(data => {
     console.log(data);
     return data
   }).catch(err => {
@@ -126,7 +126,7 @@ app.post("/create-card", (request,response) => {
 })
 // Moving a card to a new list
 app.post("/move-list",(req,res) => {
-  user.findOne({"username":req.body.username}).then(data => {
+  user.findOne({"username":req.body.username}).then(() => {
     user.updateOne({ "collect.card_name": req.body.card_name }, { $set: { "collect.$.parent": req.body.parent } }, (err, response) => {
       if (err) { res.render("error",{error_msg:err}) }
       else {
@@ -140,3 +140,19 @@ app.post("/move-list",(req,res) => {
     })
   }).catch(err => {console.log(err);})
 });
+// Delete cards
+app.post("/delete-card",(req, res) => {
+  user.findOne({ "username": req.body.username }).then(() => {
+    user.updateOne({ "username": req.body.username }, { $pull:{"collect":{"card_name":req.body.card_name}}}, (err, response) => {
+      if (err) { res.render("error", { error_msg: err }) }
+      else {
+        user.findOne({ "username": req.body.username }).then(data => {
+          Sess.collect = data.collect;
+          res.redirect("board");
+        }).catch(err => {
+          res.render("error", { error_msg: err })
+        })
+      }
+    })
+  }).catch(err => { console.log(err); })
+})

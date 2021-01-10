@@ -60,3 +60,13 @@ const CreateCard = () => {
     </form>
   )
 }
+// Overlay for cards
+const CardOverlay = (props) => {
+  return(
+    <div className="container card-overlay">
+      <i className="fas fa-times"></i>
+      <h1>{props.name}</h1>
+      <button id="delete-card-btn">Delete</button>
+    </div>
+  )
+};
