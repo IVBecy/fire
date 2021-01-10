@@ -5,11 +5,13 @@ This is a trello-like app. This app was made, so that I can practice node.js and
 - REACT
 - NODE
 - EJS
+- HTML & CSS
 
 # Features:
 - Sign in / up
 - Creating cards
 - Moving cards between different list
+- Delete cards
 
 # Usability:
 - [X] PC
