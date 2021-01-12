@@ -53,11 +53,11 @@ const SignInForm = () => {
 }
 
 // card creating form
-const CreateCard = () => {
+const CreateCard = (props) => {
   return(
     <form className="add-card-form" method="POST" action="/create-card">
       <input type="text" name="card_name" placeholder="Enter a title for this card..."/><br/>
-      <input type="submit" value="Create"/>
+      <input type="submit" value="Create" /><i className="fas fa-times" id={props.parent}></i>
     </form>
   )
 }

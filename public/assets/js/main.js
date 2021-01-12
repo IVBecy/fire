@@ -76,14 +76,18 @@ $(document).ready(() => {
   }
   // Adding a new card
   const addCardBtns = document.getElementsByClassName("add-card");
+  var list = {};
   if (addCardBtns){
     for (var i in addCardBtns){
       if (typeof addCardBtns[i] === "object") {
         addCardBtns[i].onclick = (e) => {
-          e.target.style.display = "none";
-          const newDiv = document.createElement("div");
-          e.target.parentNode.appendChild(newDiv);
-          ReactDOM.render(<CreateCard/>,newDiv)
+          var addCardBtn = e.target
+          addCardBtn.style.display = "none";
+          var newDiv = document.createElement("div");
+          newDiv.id = addCardBtn.parentNode.id;
+          list[newDiv.id] = newDiv;
+          addCardBtn.parentNode.appendChild(newDiv);
+          ReactDOM.render(<CreateCard parent={addCardBtn.parentNode.id}/>,newDiv)
           // Add extra info
           setTimeout(() => {
             createTokenInput(document.getElementsByClassName("add-card-form")[0])
@@ -92,6 +96,17 @@ $(document).ready(() => {
             // username
             const name = document.getElementsByName("username")[0].content;
             createHiddenInput("username", name, document.getElementsByClassName("add-card-form")[0]);
+            // Closing the form if "x" is clicked
+            for (var t in document.getElementsByClassName("fas fa-times")){
+              if (typeof document.getElementsByClassName("fas fa-times")[t] === "object"){
+                document.getElementsByClassName("fas fa-times")[t].onclick = (event) => { 
+                list[event.target.id].style.display = "none";
+                ReactDOM.unmountComponentAtNode(list[event.target.id]);
+                document.getElementById(event.target.id.concat("-create")).style.display = "block";
+                delete list[event.target.id];
+                };
+              }
+            }
           },10);
         } 
       }
