@@ -6,6 +6,7 @@ const Header = () =>{
   return(
     <div className="container-fluid header">
       <h3><i className="fas fa-fire"></i> Fire</h3>
+      <form action="/logout" method="POST"><input type="submit" value="Log out"></input></form>
     </div>
   )
 }

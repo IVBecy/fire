@@ -46,6 +46,7 @@ console.log(`Server up at 127.0.0.1:${port}`);
 app.get("/", csrfProtection,(req,res) => {
   res.render("index", { csrf_token: req.csrfToken()});
 })
+// board
 app.get("/board", csrfProtection, (req, res) => {
   for(var i in Sess.collect){
     Sess.collect[i].card_name = decodeURI(Sess.collect[i].card_name)
@@ -155,4 +156,9 @@ app.post("/delete-card",(req, res) => {
       }
     })
   }).catch(err => { console.log(err); })
+})
+// Log out
+app.post("/logout", (req,res) => {
+  Sess.destroy();
+  res.redirect("/");
 })

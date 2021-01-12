@@ -127,12 +127,42 @@ i{
   overflow: hidden;
 }
 
-.header .sign-out {
+.header #sign-out{
   float: right;
 }
 
-.header h3 {
-  float: none;
+.header #sign-out:hover{
+  cursor: pointer;
+}
+
+.header h3{
+ float: left;
+}
+
+.header form{
+  background: none;
+}
+
+.header input[type="submit"]{
+  float: right;
+  margin:10px;
+  border-radius: 10px;
+  color:whitesmoke;
+  padding:5px;
+  border:0;
+  outline: 0;
+  background-color: rgba(255, 255, 255, .15);  
+  backdrop-filter: blur(5px);
+  color:white;
+}
+
+
+.header input[type="submit"]:hover{
+  color: black;
+}
+
+.header form{
+  padding:0;
 }
 
 .header-outside{
