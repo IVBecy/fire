@@ -1,14 +1,14 @@
 "Use strict"
 $(document).ready(() => {
   // Adding csrf token to forms
-  const createTokenInput = () => {
+  const createTokenInput = (form) => {
     const token_elem = document.getElementsByName("csrf-token")[0]
     const token = token_elem.content;
     const token_input = document.createElement("INPUT")
     token_input.type = "hidden";
     token_input.name = "_csrf";
     token_input.value = token;
-    document.getElementsByTagName("form")[0].appendChild(token_input);
+    form.appendChild(token_input);
   }
   // Adding extra data to any form
   const createHiddenInput = (name, value, form) => {
@@ -39,7 +39,7 @@ $(document).ready(() => {
       setTimeout(() => {
         ReactDOM.render(<SignInForm />, modal);
         // Add csrf token to the form
-        createTokenInput()
+        createTokenInput(document.getElementsByTagName("FORM")[0])
         //closing the form
         document.getElementsByClassName("fas fa-times")[0].onclick = () => {
           modal.style.display = "none";
@@ -86,12 +86,12 @@ $(document).ready(() => {
           ReactDOM.render(<CreateCard/>,newDiv)
           // Add extra info
           setTimeout(() => {
-            createTokenInput()
+            createTokenInput(document.getElementsByClassName("add-card-form")[0])
             //parent elem
-            createHiddenInput("parent_element",e.target.parentNode.id,document.getElementsByTagName("form")[0])
+            createHiddenInput("parent_element", e.target.parentNode.id, document.getElementsByClassName("add-card-form")[0]);
             // username
             const name = document.getElementsByName("username")[0].content;
-            createHiddenInput("username", name, document.getElementsByTagName("form")[0]);
+            createHiddenInput("username", name, document.getElementsByClassName("add-card-form")[0]);
           },10);
         } 
       }

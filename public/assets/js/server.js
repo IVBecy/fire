@@ -113,15 +113,15 @@ app.post("/create-card", (request,response) => {
   // Append new data
   user.updateOne({ "username": request.body.username }, { $addToSet: { collect: newData } }, (err, res) => {
     if (err) {
-      res.render("error", { error_msg: err })
+      response.render("error", { error_msg: err })
     }
     else {
       user.findOne({ "username": request.body.username }).then(data => {
         Sess.collect = data.collect;
+        response.redirect("board");
       }).catch(err => {
         response.render("error",{error_msg:err})
       })
-      response.redirect("board");
     }
   })
 })
